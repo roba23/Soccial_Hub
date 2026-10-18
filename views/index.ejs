@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialHub — Your community</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <h2><a href="/">SocialHub</a></h2>
+        <input type="search" placeholder="Search your community..." aria-label="Search">
+    </nav>
+
+    <div class="container">
+
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/">🏠 Home</a></li>
+                <li><a href="/users/profile">👤 Profile</a></li>
+                <li><a href="/users/friends">👤👤 Friends</a></li>
+                <li><a href="/messages">💬 Messages</a></li>
+                <li><a href="#">🔔 Notifications</a></li>
+                <li><a href="/users/logout">↪ Log out</a></li>
+            </ul>
+        </aside>
+
+        <main class="feed">
+
+            <form action = "/users/create_post" method = "post" class="create-post" >
+                <textarea placeholder="What's on your mind?" name="postBody" required
+                oninvalid="this.setCustomValidity('what is on your mind')"></textarea>
+                <button type="submit">Share post</button>
+            </form>
+            <% if(locals.data) { %>
+                <% data.forEach(element => { %>
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/50" alt="">
+                    <h4><%=element.postUsername %></h4>
+                </div>
+
+                <p>
+                 <%=element.postBody %>
+                </p>
+
+                <form  class="post-actions" action="/users/post-actions" method="post">
+                    <input type="hidden" value="<%=element._id%>" name="postId">
+                    <button  type = "submit" name="action" value ="like" ><%=element.likes? (element.likes) : '' %>👍 Like</button>
+                    <button type = "submit" name="action" value="dislike" >👎<%=element.dislikes ? (element.dislikes) : '' %> Dislike</button>
+                    <button type="button">💬 Comment</button>
+                    <button type="button">↗ Share</button>
+                </form>
+            </div>
+               <%  }); } %>
+            
+
+           
+
+        </main>
+
+        <aside class="profile">
+            <img src="https://via.placeholder.com/100" alt="">
+            <h3><%if(locals.user){%>
+                <%= user.username %>
+            <%} %></h3>
+            <p>Web & Android Developer</p>
+
+            <div class="stats">
+                <div>
+                    <h4>250</h4>
+                    <p>Posts</p>
+                </div>
+
+                <div>
+                    <h4>1.2K</h4>
+                    <p>Followers</p>
+                </div>
+
+                <div>
+                    <h4>800</h4>
+                    <p>Following</p>
+                </div>
+            </div>
+            <div class="people">
+                     <% if(locals.friendRequest){ %>
+                        <h4>Friend Request</h4>
+                        <% friendRequest.forEach(element => { %>
+                        <div class="card">
+                         <form action= "users/acceptRequest" method = "post">
+                            <img src="https://placehold.co/48x48/e9e7ff/6658e8?text=U" alt="">
+                            <p name="username"><%=element %></p>
+                            <input type="hidden" name="username" value="<%=element %>">
+                            <div class="req_btn">
+                             <button type="submit">Accept</button>
+                             </div>
+                         </form>
+                        </div>
+                       <% }); } %>
+                        
+                
+                    <% if(locals.users){ %>
+                        <h4>People you may know</h4>
+                        <% users.forEach(element => { %>
+                            
+                        <div class="card">
+                         <form action= "users/addFriend" method = "post">
+                            <img src="https://placehold.co/48x48/e9e7ff/6658e8?text=U" alt="">
+                            <p name="username"><%=element.username %></p>
+                            <input type="hidden" name="username" value="<%=element.username %>">
+                            <input type="hidden" name="id" value="<%=element._id%>">
+                            <div class="req_btn">
+                             <button type="submit">Add Friend</button>
+                             </div>
+                         </form>
+                        </div>
+                       <% }); } %>
+                    
+                    
+                    
+                </div>
+
+                
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>

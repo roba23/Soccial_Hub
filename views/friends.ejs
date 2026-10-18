@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends — SocialHub</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2><a href="/">SocialHub</a></h2>
+        <input type="search" placeholder="Search your community..." aria-label="Search">
+    </nav>
+
+    <div class="container friends-page">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/">🏠 Home</a></li>
+                <li><a href="/users/profile">👤 Profile</a></li>
+                <li><a href="/users/friends" aria-current="page">👥 Friends</a></li>
+                <li><a href="/messages">💬 Messages</a></li>
+                <li><a href="/users/logout">↪ Log out</a></li>
+            </ul>
+        </aside>
+
+        <main class="friends-content">
+            <header class="friends-heading">
+                <div>
+                    <p class="eyebrow">YOUR COMMUNITY</p>
+                    <h1>Friends</h1>
+                    <p class="friends-subtitle">Keep up with the people you’ve connected with.</p>
+                </div>
+                <span class="friends-count"><%= friends.length %> <%= friends.length === 1 ? 'friend' : 'friends' %></span>
+            </header>
+
+            <% if (friends.length) { %>
+                <div class="friends-grid">
+                    <% friends.forEach(friend => { %>
+                        <article class="friend-card">
+                            <div class="friend-avatar" aria-hidden="true"><%= friend.trim().charAt(0).toUpperCase() %></div>
+                            <div class="friend-info">
+                                <h2><%= friend %></h2>
+                                <p>Connected on SocialHub</p>
+                            </div>
+                            <a class="friend-message" href="/message/messageBoard?sendTo=<%= encodeURIComponent(friend) %>">Message <span aria-hidden="true">→</span></a>
+                        </article>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <section class="friends-empty">
+                    <div class="empty-icon" aria-hidden="true">👋</div>
+                    <h2>Your circle starts here</h2>
+                    <p>You haven’t added any friends yet. Visit the home feed to find people and send a friend request.</p>
+                    <a href="/" class="empty-action">Explore people</a>
+                </section>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>

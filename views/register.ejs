@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-container">
+    <h1><a href="/">SocialHub</a></h1>
+
+    <form  id="registrationForm" class="auth-form" action="/users/register" method="post">
+        
+        <input type="text"  name="fullname" value= "<%= locals.data ? data.fullname : ''%>" placeholder="Full Name"  required >
+
+        <input type="email"  name="email" value="<%= locals.data ? data.email : ''%>" placeholder="Email" required>
+        <% if(locals.taken && taken === 'email'){ %>
+            <p style="color:red">user with this email already registered</p>
+        <% } %>
+        <input type="text"  name="username" value="<%= locals.data ? data.username : ''%>" placeholder="Username" required>
+
+        <% if(locals.taken && taken === 'username'){ %>
+            <p style="color:red">username taken</p>
+        <% } %>
+
+        <lable for="birthdate">Birth Date:</lable>
+        
+        <input type="date" name="birthdate" value=<%= locals.data ? data.birthdate: ''%>   required>
+         
+        <input  id="password" type="password" placeholder="Password" name="password" required>
+
+        <input id="confirmPassword" type="password" placeholder="Confirm Password" required>
+
+        <button type="submit">Create Account</button>
+
+    </form>
+    <div id="error"></div>
+    <p>Already have an account?
+        <a href="/login">Login</a>
+    </p>
+</div>
+<script src="/scripts/validate.js">
+   
+</script>
+</body>
+</html>

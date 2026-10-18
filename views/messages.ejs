@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/styles/main.css">
+        <title>Messages — SocialHub</title>
+    </head>
+    <body>
+        <nav class="navbar">
+    <div class="logo"><a href="/">SocialHub</a></div>
+    <input type="text" placeholder="search">
+</nav>
+            
+        </nav>
+        <div class="container messagePage">
+            <aside class="peopleList">
+                <h1>Friends</h1>
+                <%friends.forEach(element=>{ %>
+                    <div class="card">
+                        <a href="/message/messageBoard?sendTo=<%=element%>"><%=element%></a>
+                    </div>
+                    
+                <% }); %>
+                
+                
+            </aside>
+            <% if(locals.sendTo) {%>
+            <div id="messageBoard" class="messageBoard">
+                <h1><%=sendTo%> </h1> 
+                 <%if(locals.data.length > 0) { %>
+                    <%data.forEach(element=>{ %>
+                        <div class="message_floater <%= element.sentBy === sentBy ? 'sent' : 'received' %>">
+                            <%=element.message %>
+                        </div>
+
+                   <%  }) %>
+                <% } %>
+                
+               
+                
+                
+                
+            </div>
+            <form id="form" class="compose_message" action="/message/sendmessage" method="post">
+                    <input id="sendTo"  type="hidden" name="sendTo" value="<%=sendTo%>">
+                    <input id ="sentBy" type="hidden" name="sentBy" value="<%=sentBy%>">
+                    <textarea id="input" name="messageBody">
+                </textarea>
+                <input type="submit">
+                </form>
+            <%} %>
+        </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById("form");
+        const input = document.getElementById("input");
+        const messages = document.getElementById("messageBoard");
+        const sentBy = document.getElementById("sentBy");
+        const sendTo = document.getElementById("sendTo");
+
+        // If a chat board is open, join this specific private room immediately
+        if (sentBy && sendTo) {
+            socket.emit("join-room", { 
+                sentBy: sentBy.value, 
+                sendTo: sendTo.value 
+            });
+        }
+
+        socket.on("recieve-message", (msg) => {
+            const item = document.createElement("div");
+            console.log("recieved message is:", msg);
+            const message = typeof msg === "string" ? { message: msg } : msg;
+            item.className = `message_floater ${message.sentBy === sentBy.value ? "sent" : "received"}`;
+            item.textContent = message.message;
+            messages.appendChild(item);
+            
+            // Auto-scroll to latest message
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const messageText = input.value.trim();
+            
+            if (messageText) {
+                socket.emit("chat message", {
+                    message: messageText, 
+                    sentBy: sentBy.value, 
+                    sendTo: sendTo.value
+                });
+                
+                // Clear the textarea after sending
+                input.value = "";
+            }
+        });
+
+        console.log("script under the message.ejs running");
+    </script>
+    </body>
+</html>

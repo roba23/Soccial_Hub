@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SocialHub</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+
+        <h1 class="logo">SocialHub</h1>
+
+        <h2>Welcome Back</h2>
+
+        <form class="auth-form" action="/login" method="POST">
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+            >
+
+            <div class="remember-row">
+                <label>
+                    <input type="checkbox" name="remember">
+                    Remember Me
+                </label>
+
+                <a href="#" class="forgot-link">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <button class="google-btn" onclick="window.location.href='/auth/google'">
+            Continue with Google
+        </button>
+
+        <p class="register-link">
+            Don't have an account?
+            <a href="/users/register">Register</a>
+        </p>
+
+    </div>
+
+</body>
+</html>
